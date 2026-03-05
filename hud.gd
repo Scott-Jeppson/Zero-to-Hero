@@ -29,6 +29,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	# TODO Make a game over screen
 	if game_paused:
 		return
 	# Update health display every frame
