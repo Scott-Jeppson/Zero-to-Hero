@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cakr420qf1k53"]
+
+[ext_resource type="Texture2D" uid="uid://cbpetvvmg1ky0" path="res://art-assets/enemies/Eight.png" id="1_5a3dh"]
+[ext_resource type="Script" uid="uid://y6a7ax2ywwwl" path="res://Mobs/Enemy_8_Double/enemy_8_double.gd" id="1_wyspl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wyspl"]
+size = Vector2(45, 68)
+
+[node name="Enemy_8_Double" type="RigidBody2D" unique_id=315878960]
+collision_layer = 2
+script = ExtResource("1_wyspl")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=666358964]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_5a3dh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=873785790]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_wyspl")

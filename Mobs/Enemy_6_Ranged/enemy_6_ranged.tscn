@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bvm8fvnxocap8"]
+
+[ext_resource type="Texture2D" uid="uid://dcdewe5h874nx" path="res://art-assets/enemies/Six.png" id="1_ao6kb"]
+[ext_resource type="Script" uid="uid://cjb4wmron0mek" path="res://Mobs/Enemy_6_Ranged/enemy_6_ranged.gd" id="1_wfyb0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wfyb0"]
+size = Vector2(35, 61)
+
+[node name="Enemy_6_Ranged" type="RigidBody2D" unique_id=767299866]
+collision_layer = 2
+script = ExtResource("1_wfyb0")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=213965066]
+scale = Vector2(0.11, 0.11)
+texture = ExtResource("1_ao6kb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1585687118]
+position = Vector2(0.5, -2.5)
+scale = Vector2(1.1, 1.1)
+shape = SubResource("RectangleShape2D_wfyb0")

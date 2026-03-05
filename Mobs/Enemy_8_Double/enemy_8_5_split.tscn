@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://xrcwh40bqg05"]
+
+[ext_resource type="Texture2D" uid="uid://biy2h004s70j3" path="res://art-assets/enemies/Eight-split.png" id="1_e28un"]
+[ext_resource type="Script" uid="uid://om8lvynqd4a0" path="res://Mobs/Enemy_8_Double/enemy_8_5_split.gd" id="1_yvh14"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yvh14"]
+size = Vector2(42, 38)
+
+[node name="Enemy_8-5_Split" type="RigidBody2D" unique_id=1637826327]
+collision_layer = 2
+script = ExtResource("1_yvh14")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=463446740]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_e28un")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=696984682]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_yvh14")

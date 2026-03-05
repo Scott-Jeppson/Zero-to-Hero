@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cmws1mi8fbkyq"]
+
+[ext_resource type="Script" uid="uid://dw4db7mgnvuv3" path="res://Player/player.gd" id="1_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://c0s6jsvm44mue" path="res://art-assets/player/Zero.png" id="1_l8h54"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ntmi"]
+size = Vector2(41, 67)
+
+[node name="Player" type="Area2D" unique_id=597426018 groups=["players"]]
+collision_mask = 3
+script = ExtResource("1_4ntmi")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1805423995]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_l8h54")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1766828380]
+position = Vector2(-1.5, -1.5)
+shape = SubResource("RectangleShape2D_4ntmi")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

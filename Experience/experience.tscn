@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b3lvphu1uam6i"]
+
+[ext_resource type="Script" uid="uid://c6wf4knst6vnx" path="res://Experience/experience.gd" id="1_tf8js"]
+[ext_resource type="Texture2D" uid="uid://coiqpulfobodp" path="res://art-assets/drops/exp/small.png" id="2_hxuth"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fhu84"]
+radius = 10.049875
+
+[node name="Experience" type="Area2D" unique_id=942507395]
+script = ExtResource("1_tf8js")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=399376812]
+texture = ExtResource("2_hxuth")
+offset = Vector2(1, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=500936659]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_fhu84")

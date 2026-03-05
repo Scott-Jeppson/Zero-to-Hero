@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://duroth74hmak"]
+
+[ext_resource type="Script" uid="uid://dyrv5ui0yuvti" path="res://Mobs/mob_base.gd" id="1_clryv"]
+
+[node name="MobBase" type="RigidBody2D" unique_id=268715400 groups=["enemy"]]
+collision_layer = 2
+gravity_scale = 0.0
+script = ExtResource("1_clryv")

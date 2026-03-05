@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://b0pmd5yege86e"]
+
+[ext_resource type="Script" uid="uid://bdtr35m81buar" path="res://Mobs/Enemy_3_Attacker/enemy_3_attacker.gd" id="1_5wb8t"]
+[ext_resource type="Texture2D" uid="uid://b0hmh8mlml0i8" path="res://art-assets/enemies/Three.png" id="1_p0csj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p0csj"]
+size = Vector2(32, 53)
+
+[node name="Enemy_3_Attacker" type="RigidBody2D" unique_id=984993198]
+collision_layer = 2
+script = ExtResource("1_5wb8t")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1008033755]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_p0csj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1630402304]
+position = Vector2(-5, -4.5)
+shape = SubResource("RectangleShape2D_p0csj")
+metadata/_edit_group_ = true

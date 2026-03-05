@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cpnjxffsg13cq"]
+
+[ext_resource type="Texture2D" uid="uid://bqf0hhmh32n1s" path="res://art-assets/enemies/Five.png" id="1_dm1w3"]
+[ext_resource type="Script" uid="uid://3nhh0otf5ce0" path="res://Mobs/Enemy_5_Speedy/enemy_5_speedy.gd" id="1_f14lc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3cx07"]
+size = Vector2(43, 61)
+
+[node name="Enemy_5_Speedy" type="RigidBody2D" unique_id=984993198]
+collision_layer = 2
+script = ExtResource("1_f14lc")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1008033755]
+scale = Vector2(0.065, 0.065)
+texture = ExtResource("1_dm1w3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1035732531]
+position = Vector2(-1.0000002, -1)
+scale = Vector2(0.65, 0.65)
+shape = SubResource("RectangleShape2D_3cx07")
+metadata/_edit_group_ = true

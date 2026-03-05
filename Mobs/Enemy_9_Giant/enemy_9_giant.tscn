@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bdmn43x37w5qs"]
+
+[ext_resource type="Texture2D" uid="uid://drcwsfn8srkif" path="res://art-assets/enemies/Nine.png" id="1_6yimv"]
+[ext_resource type="Script" uid="uid://dr062ifhdsj5h" path="res://Mobs/Enemy_9_Giant/enemy_9_giant.gd" id="1_l1ctu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l1ctu"]
+size = Vector2(39, 60)
+
+[node name="Enemy_9_Giant" type="RigidBody2D" unique_id=462000833]
+scale = Vector2(2.5, 2.5)
+collision_layer = 2
+script = ExtResource("1_l1ctu")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=171692705]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_6yimv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1772917481]
+position = Vector2(-1.5, 0)
+scale = Vector2(2.5, 2.5)
+shape = SubResource("RectangleShape2D_l1ctu")

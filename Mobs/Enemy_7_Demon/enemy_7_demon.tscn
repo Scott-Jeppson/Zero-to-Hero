@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://0ythsnferf5k"]
+
+[ext_resource type="Script" uid="uid://di32386a3pc1m" path="res://Mobs/Enemy_7_Demon/enemy_7_demon.gd" id="1_otvja"]
+[ext_resource type="Texture2D" uid="uid://c40nudfi35y13" path="res://art-assets/enemies/Seven.png" id="1_xsj5b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_otvja"]
+size = Vector2(42, 64)
+
+[node name="Enemy_7_Demon" type="RigidBody2D" unique_id=1317151786]
+collision_layer = 2
+script = ExtResource("1_otvja")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1452442749]
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("1_xsj5b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1860979603]
+position = Vector2(-3, 0)
+scale = Vector2(1.5, 1.5)
+shape = SubResource("RectangleShape2D_otvja")

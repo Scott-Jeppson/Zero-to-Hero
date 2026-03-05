@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bp4374epv52x7"]
+
+[ext_resource type="Texture2D" uid="uid://gcah7o5h65dd" path="res://art-assets/attacks/player_attacks/minus.png" id="1_0n55r"]
+[ext_resource type="Script" uid="uid://dguja3s1kmpg" path="res://Attacks/Player Attacks/minus.gd" id="1_aowud"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0n55r"]
+size = Vector2(40, 9)
+
+[node name="Minus" type="Area2D" unique_id=1104159336]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_aowud")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2137988233]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_0n55r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=834580034]
+shape = SubResource("RectangleShape2D_0n55r")

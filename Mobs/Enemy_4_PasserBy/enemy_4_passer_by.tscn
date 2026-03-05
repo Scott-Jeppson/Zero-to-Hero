@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://c2s2f4odi8mwk"]
+
+[ext_resource type="Texture2D" uid="uid://cf4rdcjuvo6q3" path="res://art-assets/enemies/Four.png" id="1_sp2k8"]
+[ext_resource type="Script" uid="uid://c7ro1a1iiamwn" path="res://Mobs/Enemy_4_PasserBy/enemy_4_passer_by.gd" id="1_x2owl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sp2k8"]
+size = Vector2(25, 46)
+
+[node name="Enemy_4_PasserBy" type="RigidBody2D" unique_id=984993198]
+collision_layer = 2
+script = ExtResource("1_x2owl")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1008033755]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_sp2k8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1672752470]
+position = Vector2(0.5, -2)
+shape = SubResource("RectangleShape2D_sp2k8")
+metadata/_edit_group_ = true

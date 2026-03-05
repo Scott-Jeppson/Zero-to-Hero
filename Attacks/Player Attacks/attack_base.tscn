@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dkd1kn854mwge"]
+
+[ext_resource type="Script" uid="uid://r0rc068r6iwl" path="res://Attacks/Player Attacks/attack_base.gd" id="1_nmwca"]
+
+[node name="Attack_Base" type="Area2D" unique_id=1525415197]
+script = ExtResource("1_nmwca")
