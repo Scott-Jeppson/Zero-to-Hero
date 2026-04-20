@@ -2,6 +2,7 @@ extends Node2D
 
 var spawn_difficulty_timer: float = 0.0  # Tracks time for spawn rate increase
 var game_paused: bool = true
+var game_state: String = "Main Menu"
 
 # Mob spawning configuration with weights (0 = never spawn initially)
 var mob_weights: Dictionary = {
