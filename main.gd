@@ -43,7 +43,8 @@ func _ready() -> void:
 	
 	$Player.add_attack("res://Attacks/Player Attacks/minus.tscn", 1.0)
 	$Mob_Spawner.start()
-	$Player/HUD.visible = false
+	$Player/InGameHUD.visible = false
+	GameStateTracker.change_state("Main Menu")
 
 func _on_game_state_changed(new_state: String) -> void:
 	match new_state:
@@ -139,7 +140,7 @@ func _pause_game() -> void:
 	"""Pauses the game"""
 	game_paused = true
 	$Mob_Spawner.stop()
-	$Player/HUD/Clock/TimeKeeper.stop()
+	$Player/InGameHUD/Clock/TimeKeeper.stop()
 	
 func _resume_game() -> void:
 	"Resumes the game from pause"
@@ -149,6 +150,6 @@ func _on_start_pressed() -> void:
 	$Start.visible = false
 	game_paused = false
 	$Player.game_paused = false
-	$Player/HUD.game_paused = false
-	$Player/HUD.visible = true
+	$Player/InGameHUD.visible = true
+	GameStateTracker.change_state("Playing")
 	

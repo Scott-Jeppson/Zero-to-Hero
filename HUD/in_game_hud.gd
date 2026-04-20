@@ -1,12 +1,14 @@
-extends CanvasLayer
+extends "res://HUD/base_hud.gd"
+## In-game HUD that displays player stats and timer
 
 var player: Node2D
 var health_label: Label
 var xp_label: Label
 var level_label: Label
-var game_paused: bool = true
 
 func _ready() -> void:
+	super._ready()
+	
 	# Get references to the player and labels
 	player = get_tree().get_first_node_in_group("player")
 	if not player:
@@ -28,9 +30,7 @@ func _ready() -> void:
 	$Clock/TimeKeeper.start()
 
 
-func _process(delta: float) -> void:
-	if game_paused:
-		return
+func _process(_delta: float) -> void:
 	# Update health display every frame
 	if player:
 		update_health_display()
@@ -53,7 +53,6 @@ func update_xp_display(current_xp: float, max_xp: float, level: int) -> void:
 func _on_player_died() -> void:
 	"""Called when the player dies."""
 	health_label.text = "Health: 0"
-	game_paused = true
 
 
 func _on_experience_changed(current_xp: float, max_xp: float, level: int) -> void:
@@ -62,8 +61,6 @@ func _on_experience_changed(current_xp: float, max_xp: float, level: int) -> voi
 
 
 func _on_time_keeper_timeout() -> void:
-	if game_paused:
-		return
 	"""Increase the clock by 1 second."""
 	var clock_text = $Clock.text
 	

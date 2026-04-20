@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" uid="uid://muc4bken7wn4" path="res://Fonts/Digital-Normal/Digital.otf" id="1_font"]
+[ext_resource type="Script" path="res://HUD/main_menu_hud.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dxa62q8p6i3da" path="res://art-assets/user_interface/wasd-keys-png-wasd-keys-11562858827u3bz8nzi7e.png" id="2_wasd"]
+
+[node name="MainMenuHUD" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="Start" type="Button" parent="."]
+offset_left = -420.0
+offset_top = 124.0
+offset_right = 427.0
+offset_bottom = 419.0
+theme_override_fonts/font = ExtResource("1_font")
+theme_override_font_sizes/font_size = 198
+text = "Start"
+
+[node name="Label" type="Label" parent="Start"]
+layout_mode = 0
+offset_left = -232.0
+offset_top = -490.0
+offset_right = 1125.0
+offset_bottom = -172.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_font")
+theme_override_font_sizes/font_size = 223
+text = "Zero to Hero"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WASD Icon" type="StaticBody2D" parent="Start"]
+position = Vector2(-271, 303)
+
+[node name="Sprite2D" type="Sprite2D" parent="Start/WASD Icon"]
+texture = ExtResource("2_wasd")
+
+[connection signal="pressed" from="Start" to="." method="_on_start_pressed"]
