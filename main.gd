@@ -2,7 +2,6 @@ extends Node2D
 
 var spawn_difficulty_timer: float = 0.0  # Tracks time for spawn rate increase
 var game_paused: bool = true
-var game_state: String = "Main Menu"
 
 # Mob spawning configuration with weights (0 = never spawn initially)
 var mob_weights: Dictionary = {
@@ -27,6 +26,7 @@ var spawn_location_speeds: Dictionary = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	GameStateTracker.state_changed.connect(_on_game_state_changed)
 	# Initialize spawn locations after scene tree is ready
 	spawn_locations = [
 		$Player/MobSpawn/MobSpawnLocation,
@@ -45,6 +45,14 @@ func _ready() -> void:
 	$Mob_Spawner.start()
 	$Player/HUD.visible = false
 
+func _on_game_state_changed(new_state: String) -> void:
+	match new_state:
+		"Main Menu":# Handle main menu
+			pass
+		"Playing":# Start game logic
+			pass
+		"Paused":# Pause game logic
+			pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
