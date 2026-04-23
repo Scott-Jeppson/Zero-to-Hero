@@ -1,7 +1,6 @@
 extends "res://HUD/base_hud.gd"
 ## In-game HUD that displays player stats and timer
 
-var player: Node2D
 var health_label: Label
 var xp_label: Label
 var level_label: Label
@@ -9,37 +8,24 @@ var level_label: Label
 func _ready() -> void:
 	super._ready()
 	
-	# Get references to the player and labels
-	player = get_tree().get_first_node_in_group("player")
-	if not player:
-		# Fallback: try "players" group
-		player = get_tree().get_first_node_in_group("players")
-	
 	health_label = $HealthLabel
 	xp_label = $Xp
 	level_label = $Level
 	
-	# Connect to player signals
-	if player:
-		player.died.connect(_on_player_died)
-		player.experience_changed.connect(_on_experience_changed)
-		# Display initial values
-		update_health_display()
-		update_xp_display(player.current_xp, player.xp_to_level_up, player.current_level)
+	# Connect to GameStateTracker signals
+	GameStateTracker.health_changed.connect(_on_health_changed)
+	GameStateTracker.experience_changed.connect(_on_experience_changed)
+	
+	# Display initial values from tracker
+	_on_health_changed(GameStateTracker.player_health, GameStateTracker.player_max_health)
+	_on_experience_changed(GameStateTracker.player_current_xp, GameStateTracker.player_xp_to_level_up, GameStateTracker.player_current_level)
 	
 	$Clock/TimeKeeper.start()
 
 
 func _process(_delta: float) -> void:
-	# Update health display every frame
-	if player:
-		update_health_display()
-
-
-func update_health_display() -> void:
-	"""Update the health label with player's current and max hit points."""
-	if player and health_label:
-		health_label.text = "Health: %d / %d" % [player.hit_points, player.max_hit_points]
+	# Health is now updated via signal, no need to update every frame
+	pass
 
 
 func update_xp_display(current_xp: float, max_xp: float, level: int) -> void:
@@ -50,9 +36,10 @@ func update_xp_display(current_xp: float, max_xp: float, level: int) -> void:
 		level_label.text = "Level: %d" % level
 
 
-func _on_player_died() -> void:
-	"""Called when the player dies."""
-	health_label.text = "Health: 0"
+func _on_health_changed(current_health: int, max_health: int) -> void:
+	"""Called when player health changes."""
+	if health_label:
+		health_label.text = "Health: %d / %d" % [current_health, max_health]
 
 
 func _on_experience_changed(current_xp: float, max_xp: float, level: int) -> void:

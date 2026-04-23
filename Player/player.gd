@@ -219,6 +219,7 @@ func take_damage(damage: float) -> void:
 	"""Reduce player health by the given damage amount."""
 	hit_points -= damage
 	time_since_last_damage = 0.0  # Reset regen timer
+	GameStateTracker.update_health(int(hit_points), max_hit_points)
 	if hit_points <= 0:
 		die()
 
@@ -232,6 +233,7 @@ func _apply_regen(delta: float) -> void:
 	# Regenerate health every second
 	if regen_cooldown <= 0.0:
 		hit_points = min(hit_points + regen, max_hit_points)
+		GameStateTracker.update_health(int(hit_points), max_hit_points)
 		regen_cooldown = 1.0  # Regen once per second
 
 
@@ -253,6 +255,7 @@ func gain_experience(amount: float) -> void:
 	
 	# Emit signal for HUD to update
 	experience_changed.emit(current_xp, xp_to_level_up, current_level)
+	GameStateTracker.update_experience(current_xp, xp_to_level_up, current_level)
 	
 	# Check if leveled up
 	while current_xp >= xp_to_level_up:
@@ -280,4 +283,5 @@ func _level_up() -> void:
 	
 	# Emit signals
 	experience_changed.emit(current_xp, xp_to_level_up, current_level)
+	GameStateTracker.update_experience(current_xp, xp_to_level_up, current_level)
 	level_up.emit()

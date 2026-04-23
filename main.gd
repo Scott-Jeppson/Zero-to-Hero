@@ -36,6 +36,8 @@ func _ready() -> void:
 		$Player/MobSpawn/MobSpawnLocation5,
 	]
 	
+	$Player.position = $StartPosition.position
+	
 	# Set initial progress for each spawn location
 	for spawn_location in spawn_locations:
 		if spawn_location is PathFollow2D:
@@ -44,16 +46,29 @@ func _ready() -> void:
 	$Player.add_attack("res://Attacks/Player Attacks/minus.tscn", 1.0)
 	$Mob_Spawner.start()
 	$Player/InGameHUD.visible = false
+	
+	# Initialize player stats in tracker
+	GameStateTracker.update_health(int($Player.hit_points), $Player.max_hit_points)
+	GameStateTracker.update_experience($Player.current_xp, $Player.xp_to_level_up, $Player.current_level)
+	
 	GameStateTracker.change_state("Main Menu")
 
 func _on_game_state_changed(new_state: String) -> void:
 	match new_state:
-		"Main Menu":# Handle main menu
-			pass
-		"Playing":# Start game logic
-			pass
-		"Paused":# Pause game logic
-			pass
+		"Main Menu":
+			$Player/InGameHUD.visible = false
+			$MainMenuHUD.visible = true
+		"Playing":
+			$MainMenuHUD.visible = false
+			$Player/InGameHUD.visible = true
+			game_paused = false
+			$Player.game_paused = false
+			new_game()
+			# Ensure camera is centered on player
+			$Player/Camera2D.global_position = $Player.global_position
+		"Paused":
+			game_paused = true
+			get_tree().paused = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -145,11 +160,3 @@ func _pause_game() -> void:
 func _resume_game() -> void:
 	"Resumes the game from pause"
 	game_paused = false
-
-func _on_start_pressed() -> void:
-	$Start.visible = false
-	game_paused = false
-	$Player.game_paused = false
-	$Player/InGameHUD.visible = true
-	GameStateTracker.change_state("Playing")
-	
