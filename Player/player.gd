@@ -11,7 +11,7 @@ var attack_cooldowns: Dictionary = {}  # Tracks current cooldown for each attack
 
 # Regen tracking
 var time_since_last_damage: float = 0.0
-var regen_cooldown: float = 0.0
+var regen_cooldown: float = 1.0
 
 var stats: Dictionary
 
@@ -39,10 +39,6 @@ func _process(delta: float) -> void:
 	# Update time since last damage
 	time_since_last_damage += delta
 	
-	# Apply regen if no damage taken for 2 seconds
-	if time_since_last_damage >= 2.0:
-		_apply_regen(delta)
-	
 	# Handle movement
 	var velocity = Vector2.ZERO
 	if Input.is_action_pressed("move_right"):
@@ -66,6 +62,9 @@ func _process(delta: float) -> void:
 	# Apply damage from colliding enemies every second
 	_apply_enemy_damage(delta)
 	
+	# Apply regeneration
+	_apply_regen(delta)
+	
 	# Update and launch attacks
 	_update_attacks(delta)
 
@@ -75,7 +74,7 @@ func _update_stats(new_stats: Dictionary) -> void:
 func _apply_enemy_damage(delta: float) -> void:
 	"""Apply damage from colliding enemies. Damage has a 1 second cooldown."""
 	# Decrease cooldown
-	if damage_cooldown > 0.0:
+	if damage_cooldown - delta > 0.0:
 		damage_cooldown -= delta
 		return
 	
@@ -91,9 +90,11 @@ func _apply_enemy_damage(delta: float) -> void:
 			total_damage += enemy.get_attack_power()
 	
 	if total_damage > 0:
+		regen_cooldown = 2.0  # Reset regen cooldown on damage
 		health_changed.emit(-total_damage)
-		time_since_last_damage = 0.0
-		damage_cooldown = 1.0  # Start cooldown
+		damage_cooldown = 1.0 + (delta - damage_cooldown) # Start cooldown
+
+	total_damage = 0.0  # Reset total damage after applying
 
 
 func _on_body_entered(body: PhysicsBody2D) -> void:
@@ -193,12 +194,12 @@ func _get_closest_enemy() -> Node2D:
 
 func _apply_regen(delta: float) -> void:
 	"""Apply health regeneration if player hasn't been damaged for 2 seconds."""
-	regen_cooldown -= delta
-	
 	# Regenerate health every second
-	if regen_cooldown <= 0.0:
-		#GameStateTracker.update_health(int(hit_points), max_hit_points)
-		regen_cooldown = 1.0  # Regen once per second
+	if regen_cooldown - delta <= 0.0:
+		GameStateTracker.update_health(stats.get("regen", 1))
+		regen_cooldown = 1.0 + (delta - regen_cooldown)  # Regen once per second
+	else:
+		regen_cooldown -= delta
 
 func die():
 	hide() # Player disappears after dieing.

@@ -90,6 +90,7 @@ func _process(delta: float) -> void:
 		spawn_difficulty_timer = 0.0
 
 func new_game():
+	game_paused = false
 	$Player.start($StartPosition.position)
 
 

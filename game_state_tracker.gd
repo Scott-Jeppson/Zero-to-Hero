@@ -12,17 +12,14 @@ var player_stat_dict: Dictionary
 @export var player_current_level: int = 0
 @export var player_speed: int = 200
 @export var player_strength: float = 1.0
-@export var player_regen: float = 1.0
+@export var player_regen: int = 1
 @export var player_attack_speed: float = 1.0
 @export var player_attack_range: float = 1.0
 @export var player_attack_size: float = 1.00
 @export var player_projectile_speed: float = 1.0
 
 # Experience and leveling
-@export var current_xp: float = 0.0
-@export var current_level: int = 0
-@export var xp_to_level_up: float = 50.0  # XP needed for next level
-@export var xp_per_level_multiplier: float = 1.2  # Each level requires 1.5x more XP
+@export var xp_per_level_multiplier: float = 1.5  # Each level requires 1.5x more XP
 
 signal state_changed(new_state: String)
 signal player_health_changed(current_health: int, max_health: int)
@@ -32,7 +29,8 @@ signal level_up
 signal player_stat_changed(stats: Dictionary)
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func _ready() -> void: 
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	change_state("Main Menu")
 	player = get_tree().get_first_node_in_group("player")
 
@@ -89,8 +87,7 @@ func update_health(change: int, max_health: int = player_max_health) -> void:
 	player_health += change
 	if max_health != player_max_health:
 		player_max_health = max_health
-	if player_health < 0:
-		player_health = 0
+	player_health = max(min(player_health, player_max_health), 0)
 	player_health_changed.emit(player_health, player_max_health)
 	if player_health == 0:
 		death.emit()
@@ -98,3 +95,8 @@ func update_health(change: int, max_health: int = player_max_health) -> void:
 func update_experience(xp_change) -> void:
 	"""Update player experience and emit signal."""
 	player_current_xp += xp_change
+	while player_current_xp >= player_xp_to_level_up:
+		player_current_level += 1
+		player_xp_to_level_up *= xp_per_level_multiplier
+		level_up.emit()
+	experience_changed.emit(player_current_xp, player_xp_to_level_up, player_current_level)

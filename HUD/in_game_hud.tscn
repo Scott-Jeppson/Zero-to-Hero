@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bvg5w0d3he7vw"]
 
 [ext_resource type="FontFile" uid="uid://muc4bken7wn4" path="res://Fonts/Digital-Normal/Digital.otf" id="1_37p78"]
-[ext_resource type="Script" uid="uid://84kfxe87oo5" path="res://HUD/in_game_hud.gd" id="1_64ctp"]
+[ext_resource type="Script" uid="uid://dyrpydtiwdpkb" path="res://HUD/in_game_hud.gd" id="1_khogb"]
 [ext_resource type="PackedScene" uid="uid://dbfw1o7grqxrc" path="res://User_Interface/level_up_menu.tscn" id="2_8sq4i"]
 
 [node name="InGameHUD" type="CanvasLayer" unique_id=544957502]
-script = ExtResource("1_64ctp")
+script = ExtResource("1_khogb")
 
 [node name="LevelUpMenu" parent="." unique_id=546933770 instance=ExtResource("2_8sq4i")]
 visible = false

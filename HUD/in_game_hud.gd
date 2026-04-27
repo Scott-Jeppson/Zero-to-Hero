@@ -27,15 +27,6 @@ func _process(_delta: float) -> void:
 	# Health is now updated via signal, no need to update every frame
 	pass
 
-
-func update_xp_display(current_xp: float, max_xp: float, level: int) -> void:
-	"""Update the XP and Level labels."""
-	if xp_label:
-		xp_label.text = "XP: %d / %d" % [int(current_xp), int(max_xp)]
-	if level_label:
-		level_label.text = "Level: %d" % level
-
-
 func _on_health_changed(current_health: int, max_health: int) -> void:
 	"""Called when player health changes."""
 	if health_label:
@@ -44,7 +35,11 @@ func _on_health_changed(current_health: int, max_health: int) -> void:
 
 func _on_experience_changed(current_xp: float, max_xp: float, level: int) -> void:
 	"""Called when player gains experience or levels up."""
-	update_xp_display(current_xp, max_xp, level)
+	"""Update the XP and Level labels."""
+	if xp_label:
+		xp_label.text = "XP: %d / %d" % [int(current_xp), int(max_xp)]
+	if level_label:
+		level_label.text = "Level: %d" % level
 
 
 func _on_time_keeper_timeout() -> void:
