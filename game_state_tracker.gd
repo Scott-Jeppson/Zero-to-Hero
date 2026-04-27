@@ -64,6 +64,12 @@ func change_state(new_state: String) -> void:
 	if game_state != new_state:
 		game_state = new_state
 		state_changed.emit(new_state)
+	
+	match new_state:
+		"Main Menu":
+			get_tree().paused = true
+		"Playing":
+			get_tree().paused = false
 
 func _emit_full_stats() -> void:
 	player_stat_dict = {
