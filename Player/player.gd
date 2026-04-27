@@ -213,7 +213,7 @@ func start(pos):
 
 func gain_experience(amount: float) -> void:
 	"""Gain experience"""
-	GameStateTracker.update_experience(amount)
+	experience_changed.emit(amount)
 
 
 #func _level_up() -> void:

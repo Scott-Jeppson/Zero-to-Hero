@@ -166,7 +166,6 @@ sources/0 = SubResource("TileSetAtlasSource_0xm2m")
 script = ExtResource("1_h2yge")
 
 [node name="StartPosition" type="Marker2D" parent="." unique_id=43234662]
-position = Vector2(1416, -476)
 
 [node name="MainMenuHUD" parent="." unique_id=1719122858 instance=ExtResource("4_menu")]
 
@@ -174,13 +173,13 @@ position = Vector2(1416, -476)
 wait_time = 2.0
 
 [node name="Player" parent="." unique_id=597426018 instance=ExtResource("1_efxa6")]
+position = Vector2(577, 323)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=18023493]
 
 [node name="InGameHUD" parent="Player/Camera2D" unique_id=544957502 instance=ExtResource("3_lquwl")]
 
 [node name="MobSpawn" type="Path2D" parent="Player" unique_id=773165593]
-visible = false
 position = Vector2(-1710, -847)
 curve = SubResource("Curve2D_1bvp3")
 
@@ -209,7 +208,6 @@ rotation = -3.1396933
 progress = 5512.0435
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=610693656]
-visible = false
 offset = Vector2(1344, 768)
 transform = Transform2D(1, 0, 0, 1, 1344, 768)
 

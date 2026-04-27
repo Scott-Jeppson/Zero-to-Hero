@@ -59,6 +59,8 @@ func _bind_player(node: Node) -> void:
 	_emit_full_stats()
 	if not node.health_changed.is_connected(update_health):
 		node.health_changed.connect(update_health)
+	if not node.experience_changed.is_connected(update_experience):
+		node.experience_changed.connect(update_experience)
 
 func change_state(new_state: String) -> void:
 	if game_state != new_state:

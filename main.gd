@@ -45,18 +45,20 @@ func _ready() -> void:
 	
 	$Player.add_attack("res://Attacks/Player Attacks/minus.tscn", 1.0)
 	$Mob_Spawner.start()
-	$Player/InGameHUD.visible = false
+	$Player/Camera2D/InGameHUD.visible = false
 	
 	GameStateTracker.change_state("Main Menu")
 
 func _on_game_state_changed(new_state: String) -> void:
 	match new_state:
 		"Main Menu":
+			$Player.visible = false
 			$Player/InGameHUD.visible = false
 			$MainMenuHUD.visible = true
 		"Playing":
+			$Player.visible = true
 			$MainMenuHUD.visible = false
-			$Player/InGameHUD.visible = true
+			$Player/Camera2D/InGameHUD.visible = true
 			new_game()
 			# Ensure camera is centered on player
 			$Player/Camera2D.global_position = $Player.global_position
