@@ -70,6 +70,8 @@ func change_state(new_state: String) -> void:
 			get_tree().paused = true
 		"Playing":
 			get_tree().paused = false
+		"Game Over":
+			get_tree().paused = true
 
 func _emit_full_stats() -> void:
 	player_stat_dict = {
@@ -97,6 +99,7 @@ func update_health(change: int, max_health: int = player_max_health) -> void:
 	player_health_changed.emit(player_health, player_max_health)
 	if player_health == 0:
 		death.emit()
+		change_state("Game Over")
 
 func update_experience(xp_change) -> void:
 	"""Update player experience and emit signal."""
