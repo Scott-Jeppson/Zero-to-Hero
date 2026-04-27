@@ -1,26 +1,6 @@
 extends Area2D
-signal died
-signal experience_changed(current_xp: float, max_xp: float, level: int)
-signal level_up
-
-@export var speed = 200
-@export var hit_points = 100
-@export var strength = 1
-@export var regen = 1
-@export var attack_speed = 1.0
-@export var attack_range = 1.0
-@export var attack_size = 1.0
-@export var projectile_speed = 1.0
-var game_paused: bool = true
-
-# Max health tracking
-var max_hit_points = 100
-
-# Experience and leveling
-var current_xp: float = 0.0
-var current_level: int = 0
-var xp_to_level_up: float = 50.0  # XP needed for next level
-var xp_per_level_multiplier: float = 1.2  # Each level requires 1.5x more XP
+signal health_changed(change: int)
+signal experience_changed(change: int)
 
 var colliding_enemies = []  # Track enemies currently colliding with player
 var damage_cooldown = 0.0  # Timer for damage application
@@ -33,13 +13,18 @@ var attack_cooldowns: Dictionary = {}  # Tracks current cooldown for each attack
 var time_since_last_damage: float = 0.0
 var regen_cooldown: float = 0.0
 
+var stats: Dictionary
 
 func _ready() -> void:
 	# Add to player group for detection by other systems
 	add_to_group("player")
 	
-	# Initialize max health
-	hit_points = max_hit_points
+	# Setting up to receive stats from tracker
+	GameStateTracker.player_stat_changed.connect(_update_stats)
+	GameStateTracker.death.connect(die)
+	
+	# Initialize stats
+	_update_stats(GameStateTracker.player_stat_dict)
 	
 	# Connect to body collision signals
 	body_entered.connect(_on_body_entered)
@@ -50,11 +35,6 @@ func _ready() -> void:
 	
 	
 func _process(delta: float) -> void:
-	if game_paused:
-		return
-	# Stop movement if dead
-	if hit_points <= 0:
-		return
 	
 	# Update time since last damage
 	time_since_last_damage += delta
@@ -75,7 +55,7 @@ func _process(delta: float) -> void:
 		velocity.y -= 1
 
 	if velocity.length() > 0:
-		velocity = velocity.normalized() * speed
+		velocity = velocity.normalized() * stats.get("speed", 200)
 		
 	if velocity.x != 0:
 		$Sprite2D.flip_v = false
@@ -89,19 +69,17 @@ func _process(delta: float) -> void:
 	# Update and launch attacks
 	_update_attacks(delta)
 
-
+func _update_stats(new_stats: Dictionary) -> void:
+	stats = new_stats
 
 func _apply_enemy_damage(delta: float) -> void:
-	if game_paused:
-		return
 	"""Apply damage from colliding enemies. Damage has a 1 second cooldown."""
-	if colliding_enemies.is_empty():
-		damage_cooldown = 0.0
-		return
-	
 	# Decrease cooldown
 	if damage_cooldown > 0.0:
 		damage_cooldown -= delta
+		return
+	
+	if colliding_enemies.is_empty():
 		return
 	
 	# Cooldown is ready, apply damage
@@ -113,7 +91,8 @@ func _apply_enemy_damage(delta: float) -> void:
 			total_damage += enemy.get_attack_power()
 	
 	if total_damage > 0:
-		take_damage(total_damage)
+		health_changed.emit(-total_damage)
+		time_since_last_damage = 0.0
 		damage_cooldown = 1.0  # Start cooldown
 
 
@@ -150,7 +129,7 @@ func _update_attacks(delta: float) -> void:
 	for attack in active_attacks:
 		var attack_path = attack["scene_path"]
 		var base_cooldown = attack["base_cooldown"]
-		var adjusted_cooldown = base_cooldown / attack_speed  # Higher attack_speed = lower cooldown
+		var adjusted_cooldown = base_cooldown / stats["attack_speed"]  # Higher attack_speed = lower cooldown
 		
 		# Decrease cooldown
 		if attack_cooldowns[attack_path] > 0.0:
@@ -162,8 +141,6 @@ func _update_attacks(delta: float) -> void:
 
 
 func _spawn_attack(attack_scene_path: String) -> void:
-	if game_paused:
-		return
 	"""Spawn an attack from the player's location."""
 	var attack_scene = load(attack_scene_path)
 	var attack = attack_scene.instantiate()
@@ -176,13 +153,13 @@ func _spawn_attack(attack_scene_path: String) -> void:
 	
 	# Apply player stat multipliers to attack
 	if "base_range" in attack:
-		attack.base_range *= attack_range
+		attack.base_range *= stats["attack_range"]
 	if "base_size_multiplier" in attack:
-		attack.base_size_multiplier *= attack_size
+		attack.base_size_multiplier *= stats["attack_size"]
 	if "base_speed" in attack:
-		attack.base_speed *= projectile_speed
+		attack.base_speed *= stats["projectile_speed"]
 	if "base_damage" in attack:
-		attack.base_damage *= strength
+		attack.base_damage *= stats["strength"]
 	
 	# Try to set direction for directional attacks
 	var closest_enemy = _get_closest_enemy()
@@ -214,32 +191,17 @@ func _get_closest_enemy() -> Node2D:
 	
 	return closest_enemy
 
-
-func take_damage(damage: float) -> void:
-	"""Reduce player health by the given damage amount."""
-	hit_points -= damage
-	time_since_last_damage = 0.0  # Reset regen timer
-	GameStateTracker.update_health(int(hit_points), max_hit_points)
-	if hit_points <= 0:
-		die()
-
-
 func _apply_regen(delta: float) -> void:
-	if game_paused:
-		return
 	"""Apply health regeneration if player hasn't been damaged for 2 seconds."""
 	regen_cooldown -= delta
 	
 	# Regenerate health every second
 	if regen_cooldown <= 0.0:
-		hit_points = min(hit_points + regen, max_hit_points)
-		GameStateTracker.update_health(int(hit_points), max_hit_points)
+		#GameStateTracker.update_health(int(hit_points), max_hit_points)
 		regen_cooldown = 1.0  # Regen once per second
-
 
 func die():
 	hide() # Player disappears after dieing.
-	died.emit()
 	# Must be deferred as we can't change physics properties on a physics callback.
 	$CollisionShape2D.set_deferred("disabled", true)
 
@@ -248,40 +210,29 @@ func start(pos):
 	show()
 	$CollisionShape2D.disabled = false
 
-
 func gain_experience(amount: float) -> void:
-	"""Gain experience and check for level up."""
-	current_xp += amount
-	
-	# Emit signal for HUD to update
-	experience_changed.emit(current_xp, xp_to_level_up, current_level)
-	GameStateTracker.update_experience(current_xp, xp_to_level_up, current_level)
-	
-	# Check if leveled up
-	while current_xp >= xp_to_level_up:
-		_level_up()
+	"""Gain experience"""
+	GameStateTracker.update_experience(amount)
 
 
-func _level_up() -> void:
-	"""Handle leveling up - increase all stats by a small amount."""
-	current_xp -= xp_to_level_up
-	current_level += 1
-	
-	# Increase XP required for next level
-	xp_to_level_up *= xp_per_level_multiplier
-	
-	# Increase all stats
-	max_hit_points += 10
-	hit_points += 10
-	strength += 0.1
-	speed += 2
-	regen += 1
-	attack_speed += 0.1
-	projectile_speed += 0.1
-	attack_range += 0.1
-	attack_size += 0.1
-	
-	# Emit signals
-	experience_changed.emit(current_xp, xp_to_level_up, current_level)
-	GameStateTracker.update_experience(current_xp, xp_to_level_up, current_level)
-	level_up.emit()
+#func _level_up() -> void:
+	#"""Handle leveling up - increase all stats by a small amount."""
+	#current_xp -= xp_to_level_up
+	#current_level += 1
+	#
+	## Increase XP required for next level
+	#xp_to_level_up *= xp_per_level_multiplier
+	#
+	## Increase all stats
+	#strength += 0.1
+	#speed += 2
+	#regen += 1
+	#attack_speed += 0.1
+	#projectile_speed += 0.1
+	#attack_range += 0.1
+	#attack_size += 0.1
+	#
+	## Emit signals
+	#experience_changed.emit(current_xp, xp_to_level_up, current_level)
+	#GameStateTracker.update_experience(current_xp, xp_to_level_up, current_level)
+	#level_up.emit()

@@ -47,10 +47,6 @@ func _ready() -> void:
 	$Mob_Spawner.start()
 	$Player/InGameHUD.visible = false
 	
-	# Initialize player stats in tracker
-	GameStateTracker.update_health(int($Player.hit_points), $Player.max_hit_points)
-	GameStateTracker.update_experience($Player.current_xp, $Player.xp_to_level_up, $Player.current_level)
-	
 	GameStateTracker.change_state("Main Menu")
 
 func _on_game_state_changed(new_state: String) -> void:
@@ -61,8 +57,6 @@ func _on_game_state_changed(new_state: String) -> void:
 		"Playing":
 			$MainMenuHUD.visible = false
 			$Player/InGameHUD.visible = true
-			game_paused = false
-			$Player.game_paused = false
 			new_game()
 			# Ensure camera is centered on player
 			$Player/Camera2D.global_position = $Player.global_position

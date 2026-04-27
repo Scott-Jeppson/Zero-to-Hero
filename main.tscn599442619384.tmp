@@ -173,6 +173,11 @@ script = ExtResource("1_h2yge")
 wait_time = 2.0
 
 [node name="Player" parent="." unique_id=597426018 instance=ExtResource("1_efxa6")]
+regen = null
+attack_speed = null
+attack_range = null
+attack_size = null
+projectile_speed = null
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=18023493]
 zoom = Vector2(1.5, 1.5)

@@ -13,7 +13,7 @@ func _ready() -> void:
 	level_label = $Level
 	
 	# Connect to GameStateTracker signals
-	GameStateTracker.health_changed.connect(_on_health_changed)
+	GameStateTracker.player_health_changed.connect(_on_health_changed)
 	GameStateTracker.experience_changed.connect(_on_experience_changed)
 	
 	# Display initial values from tracker
